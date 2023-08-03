@@ -2,10 +2,14 @@ import requests #biblioteca requisições http
 from bs4 import BeautifulSoup
 import pandas as pd #dataframe
 from pathlib import Path
+from datetime import datetime
 
 lista_noticias = [] #criando lista vazia
 
-response = requests.get("https://g1.globo.com/sp/vale-do-paraiba-regiao/",verify=False)
+response = requests.get("https://g1.globo.com/",verify=False)
+
+dtfiles = datetime.now().strftime('%Y%m%d_%Hh%Mm%Ss')
+print(dtfiles)
 
 if  ( response.status_code == 200 ) :    
     content = response.content
@@ -15,8 +19,7 @@ if  ( response.status_code == 200 ) :
     #elemento div classe
     noticias = site.findAll('div', attrs={'class': 'feed-post-body'})
     #print(noticias.prettify())
-    
-    
+        
     for noticia in noticias:
         titulolink = noticia.find('a', attrs={'class': 'feed-post-link'})
         if (titulolink) :
@@ -50,9 +53,8 @@ if  ( response.status_code == 200 ) :
     #print(df_news) 
     #print(df_news.describe())
 
-    csvfilepath = Path('FilesCSV/noticiasg1vp.csv')
-    excelfilepath = Path('FilesExcel/noticiasg1vp.xlsx')
-    
+    csvfilepath = Path('FilesCSV/Arq_coleta_webscraping_noticiasg1_'+dtfiles+'.csv')
+    excelfilepath = Path('FilesExcel/Arq_coleta_webscraping_noticiasg1_'+dtfiles+'.xlsx')
     csvfilepath.parent.mkdir(parents=True, exist_ok=True) 
     excelfilepath.parent.mkdir(parents=True, exist_ok=True) 
 
@@ -62,8 +64,6 @@ if  ( response.status_code == 200 ) :
     # Export to excel, codificação utf-8 , entre aspas e separador ','
     df_news.to_excel(excelfilepath, index=False )
 
-    print(csvfilepath)
-    print(excelfilepath)
         
 else :
     print ('\n Falha!',response.status_code) #conteudo da resposta
