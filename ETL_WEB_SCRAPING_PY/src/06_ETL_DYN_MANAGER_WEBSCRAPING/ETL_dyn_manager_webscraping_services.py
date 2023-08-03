@@ -75,6 +75,7 @@ class Get_ClassApoio:
             retorno = dest_csvfilepath #os.path.dirname      
         return retorno  
 
+    #APLICAR PROXY, CASO ESTEJA EM ALGUM DOS SERVIDORES
     def Aplicar_Proxy(self,appurlproxy):
         if( os.environ['COMPUTERNAME']=='DAMOLANDIA' or os.environ['COMPUTERNAME']=='DIORAMA' or os.environ['COMPUTERNAME']=='CAMALAU' ):
             os.environ["HTTPS_PROXY"] = appurlproxy
