@@ -10,7 +10,6 @@ class Get_ClassApoio:
 
     #CONFIGURAR ARQUIVO DE LOG     
     def Configurar_Log(self,logfilename):
-        print(logfilename)
         log_format = '%(asctime)s:%(levelname)s:%(filename)s:%(message)s'
         #logger = logging.getLogger('root')
         logging.basicConfig ( 
@@ -60,6 +59,7 @@ class Get_ClassApoio:
 
         return retorno 
     
+    #CRIAR TODA A ESTRUTURA DE DIRETORIOS 
     def Criar_diretorios(self,dest_csvfilepath):
         #print(dest_csvfilepath)
 
@@ -74,3 +74,14 @@ class Get_ClassApoio:
         else:
             retorno = dest_csvfilepath #os.path.dirname      
         return retorno  
+
+    def Aplicar_Proxy(self,appurlproxy):
+        if( os.environ['COMPUTERNAME']=='DAMOLANDIA' or os.environ['COMPUTERNAME']=='DIORAMA' or os.environ['COMPUTERNAME']=='CAMALAU' ):
+            os.environ["HTTPS_PROXY"] = appurlproxy
+            os.environ["HTTP_PROXY" ] = appurlproxy
+            os.environ["https_proxy"] = appurlproxy
+            os.environ["http_proxy" ] = appurlproxy
+            logging.warning('(), Proxy Aplicado : "{}"...'.format(appurlproxy))
+        else:
+            logging.warning('(), Proxy: "{}" , Sem necessidade de ser Aplicado Host:  "{}"...'.format(appurlproxy,os.environ['COMPUTERNAME']))
+        

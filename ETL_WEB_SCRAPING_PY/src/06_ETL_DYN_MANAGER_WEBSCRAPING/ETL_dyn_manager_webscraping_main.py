@@ -13,13 +13,8 @@ Instanciando Classes de Servico ou Apoio
 '''
 oGet_ClassApoio = obj_services.Get_ClassApoio() 
 
-
 dthsdescfiles = datetime.now().strftime('%Y%m%d_%Hh%Mm%Ss')
 dtdescfiles = datetime.now().strftime('%Y%m%d')
-
-
-
-
 
 '''
 Atribuições de Variaveis do App.config
@@ -28,18 +23,20 @@ Atribuições de Variaveis do App.config
 '''
 Diretorio de Trabalho
 '''
-if( os.environ['COMPUTERNAME']=='DAMOLANDIA' or os.environ['COMPUTERNAME']=='DIORAMA' or os.environ['COMPUTERNAME']=='CAMALAU'):    
+if( os.environ['COMPUTERNAME']=='DAMOLANDIA' or os.environ['COMPUTERNAME']=='DIORAMA' or os.environ['COMPUTERNAME']=='CAMALAU' ):
     appCnnstring='DBconnectionString_Prod'
-    origem_pathwork = 'D:/Metricas/'       
-else:
+    origem_pathwork = 'D:/Metricas/'    
+else:    
     appCnnstring='DBconnectionString_Dev'
     origem_pathwork = 'C:/Metricas/'
 
 origem_pathapps = origem_pathwork + 'Scripts/SQLServer/Release/'
-origem_pathappETL = origem_pathapps + 'ETL_DYN_MANAGER_WEBSCRAPING/'
+origem_pathappETL = origem_pathapps + 'etl_dyn_manager_webscraping/'
 #oGet_ClassApoio.Criar_diretorios(origem_pathappETL)
 
-#CRIANDO PATH DE LOG CASO NÃO EXISTA
+'''
+CRIANDO PATH DE LOG CASO NÃO EXISTA
+'''
 pathlog = origem_pathappETL + 'Log'
 oGet_ClassApoio.Criar_diretorios(pathlog)
 filelog = pathlog + "/LOG_ETL_DYN_MANAGER_WEBSCRAPING_{}".format(datetime.now().strftime('%Y%m%d_%Hh%Mm%Ss')) + ".log"
@@ -52,11 +49,21 @@ Connection string
 '''
 origem_appconfigfilepath = Path(origem_pathapps+'App.config')
 oGet_ClassApoio.Criar_diretorios(origem_appconfigfilepath)
-#print(origem_appconfigfilepath)
-
 appCnnstring = oGet_ClassApoio.AppConfig(str(origem_appconfigfilepath),appCnnstring)
-#print(appCnnstring)
+logging.warning('(2), Connection String : "{}"...'.format(appCnnstring))
 
+'''
+Identificando Servidor ou Estação
+'''
+appServidor = os.environ['COMPUTERNAME']
+logging.warning('(3), Proxy : "{}"...'.format(appServidor))
 
+'''
+Aplicando o Proxy caso esteja nos servidores
+'''
+appurlproxy = oGet_ClassApoio.AppConfig(str(origem_appconfigfilepath),'proxyHost')
+oGet_ClassApoio.Aplicar_Proxy(str(appurlproxy))
+                              
+    
 
 
